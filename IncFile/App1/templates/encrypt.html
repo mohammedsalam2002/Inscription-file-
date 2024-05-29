@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  <header class="header">
+    <nav class="nav">
+      <a href="#" class="nav_logo">CipherLab</a>
+
+      <a class="button" id="home_deBtn">Decryption Page</a>
+      
+
+      <ul class="nav_items">
+        <li class="nav_item">
+          <a href="#" class="nav_link">Home</a>
+          <a href="#features" class="nav_link">Features</a>
+          <a href="#about" class="nav_link">About</a>
+          <a href="#contact" class="nav_link">Contact</a>
+        </li>
+      </ul>
+
+      {% if user.is_authenticated %} 
+      <a class="button" id="signOut" href="{% url 'logout' %}">Sign out</a>
+      {% else %}
+      <a class="button" id="signOut" href="{% url 'login' %}">Login</a>
+      {% endif %}
+    </nav>
+
+    {% if messages  %}
+    {% for mesg in messages %}
+    <label href="#contact" class="nav_link">{{mesg}}</label>
+    
+    {% endfor %}
+    {% endif %}
+    
+    <style>
+      .hidden_uploadButton {
+        display: none;
+      }
+      .selectedFile {
+        max-width: 70vh ;
+        max-height: 80vh;
+        transform: translate(3%, -44%);
+        margin: auto;
+        margin-left: 5vh;
+        align-items:center;
+        border: 5px solid white ;
+
+      }
+    </style>
+    
+  </header>
+  {% if user.is_authenticated %}
+  <section class="encrypt">
+    <div class="encrypt_form">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% comment %} <label for="file">Select File:</label>
+        <input class="uploadButton" type="file" name="file" required> {% endcomment %}
+        
+        {% comment %} <label for="file">Select File:</label> {% endcomment %}
+        <button class="uploadButton" onclick="document.getElementById('fileInput').click()" required>Choose File </button>
+        <input id='fileInput' class="hidden_uploadButton" type="file" name="file" onchange="displaySelectedImage()"> 
+      
+        {% comment %} <label for="passw1">Enter Password:</label> {% endcomment %}
+        <input class='passwordField' type="password" placeholder='Enter a Password' name="passw1" required>
+        {% comment %} <label for="passw2">Confirm Password:</label> {% endcomment %}
+        <input class="passwordField" type="password" placeholder='Re-enter a Password' name="passw2" required>
+        <button class="encrypt_decryptButton" type="submit">Encrypt and Download</button>
+    </form>
+    
+
+    </div>
+    <img class='selectedFile' id='selectedFile'src='' >
+
+  </section>
+  {% else %}
+  <section class="encrypt">
+    <div class="encrypt_form">
+      
+
+
+    </div>
+  </section>
+{% endif %}
+
+  
+  <script>
+    
+      const signOutBtn = document.querySelector("#signOut");
+      const decBtn = document.querySelector('#home_deBtn');
+      const uploadButton = document.getElementById('upload_image_button');
+      const imageInput = document.getElementById('imageInput');
+      const imageContainer = document.getElementById('imageContainer');
+      const uploadIndicator = document.getElementById('uploadIndicator');
+      const encBtn = document.getElementById('encryptButton');
+      const password1 = document.getElementById('password-1-Field');
+      const password2 = document.getElementById('password-2-Field');
+      
+    
+      // Displaying Selected Image on the left of page
+      function displaySelectedImage() {
+        // Get the input element and the selected file
+        const input = document.getElementById('fileInput');
+        const file = input.files[0];
+        // Check if a file is selected
+          if (file) {
+          // Create a FileReader to read the file
+            const reader = new FileReader();
+
+          // Define the function to run when the file is loaded
+            reader.onload = function (e) {
+            // Get the image element and set its source to the loaded data URL
+              const image = document.getElementById('selectedFile');
+              image.src = e.target.result;
+          };
+
+          // Read the file as a data URL
+          reader.readAsDataURL(file);
+        }
+    }
+
+      decBtn.addEventListener("click", () => {
+        var url_decrypt = "{% url 'decrypt' %}"
+        window.location.href = url_decrypt;
+      });
+    
+      let uploadedImage = null;
+    
+      uploadButton.addEventListener('click', () => {
+        // Simulate a click on the hidden file input
+        imageInput.click();
+      });
+    
+      imageInput.addEventListener('change', (event) => {
+        const selectedFile = event.target.files[0];
+    
+        if (selectedFile) {
+            // Store the selected file in the uploadedImage variable
+            uploadedImage = selectedFile;
+    
+            // Show the upload indicator
+            uploadIndicator.style.display = 'block';
+        }
+      });
+    
+  </script>  
+
+{% endblock %}

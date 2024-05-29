@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+<!--
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Sign up</button>
+  </form>
+-->
+
+{% load static %}
+
+{% block content %}
+  <header class="header">
+    <nav class="nav">
+      <a href="#" class="nav_logo">CipherLab</a>
+
+      <ul class="nav_items">
+        <li class="nav_item">
+          <a href="#" class="nav_link">Home</a>
+          <a href="#features" class="nav_link">Features</a>
+          <a href="#about" class="nav_link">About</a>
+          <a href="#contact" class="nav_link">Contact</a>
+        </li>
+      </ul>
+
+      <button class="button" id="form-open">SignUp</button>
+    </nav>
+    <style>
+        .form_container{
+            background-color: antiquewhite;
+        }
+    </style>
+  </header>
+
+  <section class="home">
+    <div class="form_container">
+      <i class="uil uil-times form_close"></i>
+      <!-- Login From -->
+      <div class="form login_form">
+        <form action="#" method="post"> 
+          {% csrf_token %}
+          <h2>Login</h2>
+
+            <div class="form-group">
+                {{form}}
+            </div>
+
+          <div class="option_field">
+            <span class="checkbox">
+              <input type="checkbox" id="check" />
+              <label for="check">Remember me</label>
+            </span>
+          </div>
+
+          <button class="button"  type="submit">SignUp</button>
+
+          <div class="login_signup">Don't have an account? <a href="{% url 'login' %}" id="signup">Login</a></div>
+        </form>
+      </div>
+    </section>
+
+
+<script>
+    const formOpenBtn = document.querySelector("#form-open"),
+  home = document.querySelector(".home"),
+  formContainer = document.querySelector(".form_container"),
+  formCloseBtn = document.querySelector(".form_close"),
+  loginBtn = document.querySelector("#login"),
+  pwShowHide = document.querySelectorAll(".pw_hide");
+
+
+  formOpenBtn.addEventListener("click", () => {home.classList.add("show")});
+  formCloseBtn.addEventListener("click", () => home.classList.remove("show"));
+
+</script>  
+
+{% endblock content %}

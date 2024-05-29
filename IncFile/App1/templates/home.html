@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  <header class="header">
+    <nav class="nav">
+      <a href="#" class="nav_logo">CipherLab</a>
+
+      <ul class="nav_items">
+        <li class="nav_item">
+          <a href="#" class="nav_link">Home</a>
+          <a href="#features" class="nav_link">Features</a>
+          <a href="#about" class="nav_link">About</a>
+          <a href="#contact" class="nav_link">Contact</a>
+        </li>
+      </ul>
+      {% if user.is_authenticated %} 
+      <a class="button" id="signOut" href="{% url 'logout' %}">Sign out</a>
+      {% else %}
+      <a class="button" id="signOut" href="{% url 'login' %}">Login</a>
+      {% endif %}
+    </nav>
+  </header>
+  {% if user.is_authenticated %}
+  <section class="home">
+    <div class="buttons-container">
+      <button id="home_enBtn" class="modern-button primary-button">Encrypt</button>
+      <button id="home_deBtn" class="modern-button secondary-button">Decrypt</button>
+    </div>
+  
+    <div class="form_container">
+      <i class="uil uil-times form_close"></i>    
+      </div>
+    </section>
+  {% else %}
+  <section class="home">
+
+  
+    <div class="form_container">
+      <i class="uil uil-times form_close"></i>    
+      </div>
+  </section>
+  {% endif %}
+
+
+
+<script>
+
+  const signOutBtn = document.querySelector("#signOut")
+  const encBtn= document.querySelector('#home_enBtn')
+  const decBtn= document.querySelector('#home_deBtn')
+
+
+  encBtn.addEventListener("click", () => { 
+    var url_encrypt = "{% url 'encrypt' %}"
+    window.location.href= url_encrypt })
+
+  decBtn.addEventListener("click", () => {
+    var url_decrypt  = "{% url 'decrypt' %}"
+    window.location.href= url_decrypt })
+
+</script>  
+
+{% endblock content %}
